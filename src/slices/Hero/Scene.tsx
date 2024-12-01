@@ -1,6 +1,9 @@
 "use client";
 
-import FloatingCan from "@/components/FloatingCan";
+import FloatingChair from "@/components/FloatingChair";
+import FloatingDesk from "@/components/FloatingDesk";
+import FloatingLamp from "@/components/FloatingLamp";
+import FloatingPlant from "@/components/FloatingPlant";
 import { useStore } from "@/hooks/useStore";
 import { useGSAP } from "@gsap/react";
 import { Environment, OrbitControls } from "@react-three/drei";
@@ -20,14 +23,15 @@ const Scene = ({}: Props) => {
 
   const isReady = useStore((state) => state.isReady);
 
-  const can1Ref = useRef<Group>(null);
-  const can2Ref = useRef<Group>(null);
-  const can3Ref = useRef<Group>(null);
-  const can4Ref = useRef<Group>(null);
-  const can5Ref = useRef<Group>(null);
+  const deskRef = useRef<Group>(null);
+  const chairRef = useRef<Group>(null);
+  const lampRef = useRef<Group>(null);
+  const plantRef = useRef<Group>(null);
 
-  const can1GroupRef = useRef<Group>(null);
-  const can2GroupRef = useRef<Group>(null);
+  const deskGroupRef = useRef<Group>(null);
+  const chairGroupRef = useRef<Group>(null);
+  const lampGroupRef = useRef<Group>(null);
+  const plantgroupref = useRef<Group>(null);
 
   const groupRef = useRef<Group>(null);
 
@@ -35,59 +39,72 @@ const Scene = ({}: Props) => {
 
   useGSAP(() => {
     if (
-      !can1Ref.current ||
-      !can2Ref.current ||
-      !can3Ref.current ||
-      !can4Ref.current ||
-      !can5Ref.current ||
-      !can1GroupRef.current ||
-      !can2GroupRef.current ||
+      !deskRef.current ||
+      !chairRef.current ||
+      !lampRef.current ||
+      !plantRef.current ||
+      !deskGroupRef.current ||
+      !chairGroupRef.current ||
+      !lampGroupRef.current ||
+      !plantgroupref.current ||
       !groupRef.current
     )
       return;
 
     isReady();
 
-    // can starting location
-    gsap.set(can1Ref.current.position, {
-      x: -1.5,
+    // models starting location
+    gsap.set(deskRef.current.position, {
+      x: 1.2,
+      y: -0.2,
     });
-    gsap.set(can1Ref.current.rotation, {
-      z: -0.5,
-    });
-
-    gsap.set(can2Ref.current.position, {
-      x: 1.5,
-    });
-    gsap.set(can2Ref.current.rotation, {
-      z: 0.5,
+    gsap.set(deskRef.current.rotation, {
+      z: 0,
+      y: 0.6,
     });
 
-    gsap.set(can3Ref.current.position, {
-      y: 5,
+    gsap.set(chairRef.current.position, {
+      x: 1.4,
+      y: -0.55,
+    });
+    gsap.set(chairRef.current.rotation, {
+      z: 0,
+      y: 0.6,
+    });
+
+    gsap.set(lampRef.current.position, {
+      x: 1.1,
+      y: -0.66,
+      z: -1.7,
+    });
+    gsap.set(lampRef.current.rotation, {
+      z: 0,
+    });
+
+    gsap.set(plantRef.current.position, {
+      x: 0.7,
+      y: -0.09,
       z: 2,
     });
-    gsap.set(can4Ref.current.position, {
-      x: 2,
-      y: 4,
-      z: 2,
-    });
-    gsap.set(can5Ref.current.position, {
-      y: -5,
+
+    gsap.set(plantRef.current.scale, {
+      x: 0.22,
+      y: 0.2,
+      z: 0.4,
     });
 
     const introTl = gsap.timeline({
       defaults: {
         duration: 3,
-        ease: "back.out(1.4)",
+        ease: "circ",
       },
     });
 
     introTl
-      .from(can1GroupRef.current.position, { y: -5, x: 1 }, 0)
-      .from(can1GroupRef.current.rotation, { z: 3 }, 0)
-      .from(can2GroupRef.current.position, { y: 5, x: 1 }, 0)
-      .from(can2GroupRef.current.rotation, { z: 3 }, 0);
+      .from(deskGroupRef.current.position, { y: 4 }, 0.5)
+      .from(chairGroupRef.current.position, { y: 3 }, 0)
+      .from(lampGroupRef.current.position, { y: 4 }, 1)
+      .from(plantgroupref.current.position, { y: 3 }, 1.5);
 
     const scrollTl = gsap.timeline({
       defaults: {
@@ -102,27 +119,22 @@ const Scene = ({}: Props) => {
     });
 
     scrollTl
-      // rotate can group
-      .to(groupRef.current.rotation, { y: Math.PI * 2 })
-      // can 1 - black
-      .to(can1Ref.current.position, { x: -0.2, y: -0.7, z: -2 }, 0)
-      .to(can1Ref.current.rotation, { z: 0.3 }, 0)
+      // desk
+      .to(deskRef.current.position, { x: 1, y: -0.7, z: -1 }, 0)
+      .to(deskRef.current.rotation, { y: Math.PI }, 0)
 
-      // can 2 - lemonlime
-      .to(can2Ref.current.position, { x: 1, y: -0.2, z: -1 }, 0)
-      .to(can2Ref.current.rotation, {}, 0)
+      // chair
+      .to(chairRef.current.position, { x: 0.4, y: -1, z: -1 }, 0)
+      .to(chairRef.current.rotation, { y: Math.PI }, 0)
 
-      // can 3 - grape
-      .to(can3Ref.current.position, { x: -0.3, y: 0.5, z: -1 }, 0)
-      .to(can3Ref.current.rotation, { z: -0.1 }, 0)
+      // lamp
+      .to(lampRef.current.position, { x: 1, y: -0.9, z: -1 }, 0)
+      .to(lampRef.current.rotation, { y: Math.PI }, 0)
 
-      // can 4 - strawbery
-      .to(can4Ref.current.position, { x: 0, y: -0.3, z: 0.5 }, 0)
-      .to(can4Ref.current.rotation, { z: 0.3 }, 0)
+      // plant
+      .to(plantRef.current.position, { y: -0.1, z: 1 }, 0)
+      .to(plantRef.current.rotation, { y: -0.1 }, 0)
 
-      // can 5 - watermelon
-      .to(can5Ref.current.position, { x: 0.3, y: 0.5, z: -0.5 }, 0)
-      .to(can5Ref.current.rotation, { z: 0.25 }, 0)
       // all cans
       .to(
         groupRef.current.position,
@@ -133,33 +145,24 @@ const Scene = ({}: Props) => {
 
   return (
     <group ref={groupRef}>
-      <group ref={can1GroupRef}>
-        <FloatingCan
-          ref={can1Ref}
-          flavor="blackCherry"
-          floatSpeed={FLOAT_SPEED}
-        />
+      <group ref={deskGroupRef}>
+        <FloatingDesk ref={deskRef} floatSpeed={FLOAT_SPEED} />
       </group>
 
-      <group ref={can2GroupRef}>
-        <FloatingCan
-          ref={can2Ref}
-          flavor="lemonLime"
-          floatSpeed={FLOAT_SPEED}
-        />
+      <group ref={chairGroupRef}>
+        <FloatingChair ref={chairRef} floatSpeed={FLOAT_SPEED} />
       </group>
 
-      <FloatingCan ref={can3Ref} flavor="grape" floatSpeed={FLOAT_SPEED} />
+      <group ref={lampGroupRef}>
+        <FloatingLamp ref={lampRef} floatSpeed={FLOAT_SPEED} />
+      </group>
 
-      <FloatingCan
-        ref={can4Ref}
-        flavor="strawberryLemonade"
-        floatSpeed={FLOAT_SPEED}
-      />
-      <FloatingCan ref={can5Ref} flavor="watermelon" floatSpeed={FLOAT_SPEED} />
+      <group ref={plantgroupref}>
+        <FloatingPlant ref={plantRef} floatSpeed={FLOAT_SPEED} />
+      </group>
 
       {/* <OrbitControls /> */}
-      <Environment files="/hdr/lobby.hdr" environmentIntensity={1.5} />
+      <Environment files="/hdr/lobby.hdr" environmentIntensity={1} />
     </group>
   );
 };

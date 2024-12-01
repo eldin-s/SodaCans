@@ -1,6 +1,8 @@
 "use client";
 
-import FloatingCan from "@/components/FloatingCan";
+import FloatingChair from "@/components/FloatingChair";
+import FloatingCan from "@/components/FloatingDesk";
+import FloatingLamp from "@/components/FloatingLamp";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useGSAP } from "@gsap/react";
 import { Content } from "@prismicio/client";
@@ -71,7 +73,7 @@ const Scene = ({ sentence, flavor }: SkyDiveProps) => {
     // spinning can
     gsap.to(canRef.current.rotation, {
       y: Math.PI * 2,
-      duration: 1.7,
+      duration: 3,
       repeat: -1,
       ease: "none",
     });
@@ -147,15 +149,14 @@ const Scene = ({ sentence, flavor }: SkyDiveProps) => {
     <group ref={groupRef}>
       {/* Can */}
       <group rotation={[0, 0, 0.5]}>
-        <FloatingCan
+        <FloatingChair
           ref={canRef}
-          flavor={flavor}
           rotationIntensity={0}
           floatIntensity={3}
           floatSpeed={3}
         >
           <pointLight intensity={30} color="#da1b31" decay={0.6} />
-        </FloatingCan>
+        </FloatingChair>
       </group>
 
       {/* Clouds */}

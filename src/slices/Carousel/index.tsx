@@ -1,7 +1,9 @@
 "use client";
 
-import FloatingCan from "@/components/FloatingCan";
-import { SodaCanProps } from "@/components/SodaCan";
+import FloatingDesk from "@/components/FloatingDesk";
+import FloatingChair from "@/components/FloatingChair";
+// import FloatingLamp from "@/components/FloatingLamp";
+import FloatingPlant from "@/components/FloatingPlant";
 import { Content } from "@prismicio/client";
 import {
   PrismicRichText,
@@ -12,26 +14,16 @@ import { Center, Environment, View } from "@react-three/drei";
 import { useRef, useState } from "react";
 import { ArrowIcon } from "./ArrowIcon";
 import clsx from "clsx";
-import { WavyCircles } from "./WavyCircles";
 import { Group } from "three";
 import gsap from "gsap";
 
-const SPINS_ON_CHANGE = 8;
+const SPINS_ON_CHANGE = 1;
 
-const FLAVORS: {
-  flavor: SodaCanProps["flavor"];
-  color: string;
-  name: string;
-}[] = [
-  { flavor: "blackCherry", color: "#710523", name: "Black Cherry" },
-  { flavor: "grape", color: "#572981", name: "Grape Goodness" },
-  { flavor: "lemonLime", color: "#164405", name: "Lemon Lime" },
-  {
-    flavor: "strawberryLemonade",
-    color: "#690B3D",
-    name: "Strawberry Lemonade",
-  },
-  { flavor: "watermelon", color: "#4B7002", name: "Watermelon Crush" },
+const MODELS = [
+  { component: FloatingChair, name: "Chair" },
+  { component: FloatingDesk, name: "Desk" },
+  // { component: FloatingLamp, name: "Lamp" },
+  { component: FloatingPlant, name: "Decoration" },
 ];
 
 /**
@@ -43,23 +35,21 @@ export type CarouselProps = SliceComponentProps<Content.CarouselSlice>;
  * Component for "Carousel" Slices.
  */
 const Carousel = ({ slice }: CarouselProps): JSX.Element => {
-  const [currentFlavourIndex, setCurrentFlavourIndex] = useState(0);
+  const [currentModelIndex, setCurrentModelIndex] = useState(0);
+  const modelRef = useRef<Group>(null);
 
-  const sodaCanRef = useRef<Group>(null);
+  function changeModel(index: number) {
+    if (!modelRef.current) return;
 
-  function changeFlavor(index: number) {
-    if (!sodaCanRef.current) return;
-
-    const nextIndex = (index + FLAVORS.length) % FLAVORS.length;
-    console.log(FLAVORS[currentFlavourIndex].flavor, currentFlavourIndex);
+    const nextIndex = (index + MODELS.length) % MODELS.length;
 
     const tl = gsap.timeline();
 
     tl.to(
-      sodaCanRef.current.rotation,
+      modelRef.current.rotation,
       {
         y:
-          index > currentFlavourIndex
+          index > currentModelIndex
             ? `-=${Math.PI * 2 * SPINS_ON_CHANGE}`
             : `+=${Math.PI * 2 * SPINS_ON_CHANGE}`,
         ease: "power2.inOut",
@@ -67,16 +57,6 @@ const Carousel = ({ slice }: CarouselProps): JSX.Element => {
       },
       0
     )
-      .to(
-        ".background, .wavy-circles-outer, .wavy-circles-inner",
-        {
-          backgroundColor: FLAVORS[nextIndex].color,
-          fill: FLAVORS[nextIndex].color,
-          ease: "power2.inOut",
-          duration: 1,
-        },
-        0
-      )
       .to(
         ".text-wrapper",
         {
@@ -89,7 +69,7 @@ const Carousel = ({ slice }: CarouselProps): JSX.Element => {
       .to(
         {},
         {
-          onStart: () => setCurrentFlavourIndex(nextIndex),
+          onStart: () => setCurrentModelIndex(nextIndex),
         },
         0.5
       )
@@ -104,15 +84,15 @@ const Carousel = ({ slice }: CarouselProps): JSX.Element => {
       );
   }
 
+  const CurrentModel = MODELS[currentModelIndex].component;
+
   return (
     <section
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
       className="carousel relative grid h-screen grid-rows-[auto,4fr,auto] justify-center overflow-hidden bg-white py-12 text-white"
     >
-      <div className="background pointer-events-none absolute inset-0 bg-[#710523] opacity-50" />
-
-      <WavyCircles className="absolute left-1/2 top-1/2 h-[120vmin] -translate-x-1/2 -translate-y-1/2 text-[#710523]" />
+      <div className="background pointer-events-none absolute inset-0 bg-[#0e1722]" />
 
       <h2 className="relative text-center text-5xl font-bold">
         <PrismicText field={slice.primary.heading} />
@@ -120,19 +100,14 @@ const Carousel = ({ slice }: CarouselProps): JSX.Element => {
 
       <div className="grid grid-cols-[auto,auto,auto] items-center">
         <ArrowButton
-          onClick={() => changeFlavor(currentFlavourIndex - 1)}
-          label="Previous Flavor"
+          onClick={() => changeModel(currentModelIndex - 1)}
+          label="Previous Model"
           direction="left"
         />
 
         <View className="aspect-square h-[70vmin] min-h-40">
           <Center position={[0, 0, 1]}>
-            <FloatingCan
-              ref={sodaCanRef}
-              floatIntensity={0.3}
-              rotationIntensity={1}
-              flavor={FLAVORS[currentFlavourIndex].flavor}
-            />
+            <CurrentModel ref={modelRef} rotationIntensity={1} />
           </Center>
 
           <Environment
@@ -144,15 +119,15 @@ const Carousel = ({ slice }: CarouselProps): JSX.Element => {
         </View>
 
         <ArrowButton
-          onClick={() => changeFlavor(currentFlavourIndex + 1)}
-          label="Next Flavor"
+          onClick={() => changeModel(currentModelIndex + 1)}
+          label="Next Model"
           direction="right"
         />
       </div>
 
       <div className="text-area relative mx-auto text-center">
         <div className="text-wrapper text-4xl font-medium">
-          <p>{FLAVORS[currentFlavourIndex].name}</p>
+          <p>{MODELS[currentModelIndex].name}</p>
         </div>
 
         <div className="mt-2 text-2xl font-normal opacity-90">

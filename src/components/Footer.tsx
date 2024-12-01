@@ -1,18 +1,16 @@
+import Image from "next/image";
 import React from "react";
-import { FizziLogo } from "./FiziLogo";
-import CircleText from "./CircleText";
 
 type Props = {};
 
 const Footer = ({}: Props) => {
   return (
-    <footer className="bg-[#fee832] text-[#fe6334]">
-      <div className="relative mx-auto flex w-full max-w-4xl justify-center px-4 py-10">
-        <FizziLogo />
-
-        <div className="absolute right-20 top-0 size-28 origin-center -translate-y-14 md:size-48 md:-translate-y-28">
-          <CircleText />
-        </div>
+    <footer className="bg-[#0f081b] text-slate-300">
+      <div className="relative mx-auto flex flex-col items-center gap-4 w-full max-w-4xl justify-center px-4 py-10">
+        <Image src={"/logo.png"} width={70} height={70} alt="Coozy" />
+        <h1 className="font-bold text-4xl uppercase tracking-wider">
+          Coozy Furniture
+        </h1>
       </div>
     </footer>
   );

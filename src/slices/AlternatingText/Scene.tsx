@@ -1,6 +1,6 @@
 "use client";
 
-import FloatingCan from "@/components/FloatingCan";
+import FloatingDesk from "@/components/FloatingDesk";
 import React, { useRef } from "react";
 import { Group } from "three";
 import gsap from "gsap";
@@ -16,7 +16,7 @@ const Scene = ({}: Props) => {
   const canRef = useRef<Group>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)", true);
 
-  const bgColors = ["#ffa6b5", "#e9cff6", "#cbef9a"];
+  const bgColors = ["#0e1722", "#0f081b", "#0e1722"];
 
   useGSAP(
     () => {
@@ -49,15 +49,17 @@ const Scene = ({}: Props) => {
             x: xPosition,
             ease: "circ.inOut",
             delay: 0.5,
+            duration: 1,
           })
           .to(
             canRef.current.rotation,
             {
-              y: yPosition,
+              x: yPosition,
               ease: "back.inOut",
             },
             "<"
           )
+
           .to(".alternating-text-container", {
             backgroundColor: gsap.utils.wrap(bgColors, index),
           });
@@ -72,7 +74,7 @@ const Scene = ({}: Props) => {
       position-x={isDesktop ? 1 : 0}
       rotation-y={isDesktop ? -0.3 : 0}
     >
-      <FloatingCan flavor="strawberryLemonade" />
+      <FloatingDesk />
     </group>
   );
 };

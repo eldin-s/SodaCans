@@ -11,7 +11,6 @@ import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
 import gsap from "gsap";
 import { View } from "@react-three/drei";
 import Scene from "./Scene";
-import { Bubbles } from "./Bubbles";
 import { useStore } from "@/hooks/useStore";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
@@ -41,9 +40,9 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
         .from(".hero-header-word", {
           scale: 3,
           opacity: 0,
-          duration: 1,
-          ease: "power4.in",
-          delay: 0.1,
+          duration: 1.5,
+          ease: "power3.out",
+          delay: 0.2,
           stagger: 1,
         })
         .from(
@@ -76,20 +75,19 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
       scrollTl
         .fromTo(
           "body",
-          { backgroundColor: "#FDE047" },
+          { backgroundColor: "#04040e" },
           {
-            backgroundColor: "#D9F99D",
+            backgroundColor: "#0e1722",
             overwrite: "auto",
           },
           1
         )
         .from(".text-side-heading .split-char", {
           scale: 1.3,
-          y: 40,
-          rotate: -25,
+
           opacity: 0,
           stagger: 0.1,
-          ease: "back.out(3)",
+          ease: "back.in(1.7)",
           duration: 0.5,
         })
         .from(".text-side-body", {
@@ -109,24 +107,19 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
       {isDesktop && (
         <View className="hero-scene pointer-events-none sticky top-0 z-50 -mt-[100vh] hidden h-screen w-screen md:block">
           <Scene />
-          <Bubbles count={300} speed={2} repeat={true} />
         </View>
       )}
-      <div className="grid">
-        <div className="grid h-screen place-items-center">
-          <div className="grid auto-rows-min place-items-center text-center">
-            <h1 className="hero-header lg:text-[13rem] text-7xl font-black uppercase leading-[.8] text-orange-500 md:text-[9rem]">
-              <TextSplitter
-                text={asText(slice.primary.heading)}
-                wordDisplayStyle="block"
-                className="hero-header-word"
-              />
-            </h1>
-            <div className="hero-subheading mt-12 text-5xl font-semibold text-sky-950 lg:text-6xl">
+      <div className="grid md:mt-48">
+        <div className="grid h-screen place-items-center md:place-items-start">
+          <div className="grid auto-rows-min place-items-start">
+            <div className="hero-header lg:text-[8rem] text-5xl font-black uppercase leading-[.8] text-amber-800 md:text-[6rem] hero-header-word">
+              <PrismicRichText field={slice.primary.heading} />
+            </div>
+            <div className="hero-subheading mt-12 text-5xl font-semibold text-slate-400 lg:text-6xl">
               <PrismicRichText field={slice.primary.subheading} />
             </div>
 
-            <div className="hero-body text-2xl font-normal text-sky-950">
+            <div className="hero-body text-2xl mt-8 font-normal text-slate-400 md:w-1/2">
               <PrismicRichText field={slice.primary.body} />
             </div>
 
@@ -144,11 +137,11 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
           />
 
           <div className="">
-            <h2 className="text-side-heading text-balance text-6xl font-black uppercase text-sky-950 lg:text-8xl">
+            <h2 className="text-side-heading text-balance text-6xl font-black uppercase text-slate-400 lg:text-8xl">
               <TextSplitter text={asText(slice.primary.second_heading)} />
             </h2>
 
-            <div className="text-side-body mt-4 max-w-xl text-balance text-xl font-normal text-sky-950">
+            <div className="text-side-body mt-4 max-w-xl text-balance text-xl font-normal text-slate-400">
               <PrismicRichText field={slice.primary.second_body} />
             </div>
           </div>

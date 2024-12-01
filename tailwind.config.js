@@ -16,6 +16,9 @@ module.exports = {
         "slide-left": "slide-left 3s linear infinite",
         "spin-slow": "spin 6s linear infinite",
       },
+      backgroundImage: {
+        "hero-bg": "url('/furniture.jpg')",
+      },
     },
   },
 };
